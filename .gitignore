@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/eclipse,visualstudiocode,java
-# Edit at https://www.toptal.com/developers/gitignore?templates=eclipse,visualstudiocode,java
+# Created by https://www.toptal.com/developers/gitignore/api/netbeans,eclipse,java,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=netbeans,eclipse,java,visualstudiocode
 
 ### Eclipse ###
 .metadata
@@ -93,6 +93,16 @@ local.properties
 hs_err_pid*
 replay_pid*
 
+### NetBeans ###
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
@@ -112,4 +122,4 @@ replay_pid*
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/eclipse,visualstudiocode,java
+# End of https://www.toptal.com/developers/gitignore/api/netbeans,eclipse,java,visualstudiocode
