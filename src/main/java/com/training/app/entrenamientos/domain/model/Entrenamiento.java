@@ -1,22 +1,23 @@
 package com.training.app.entrenamientos.domain.model;
 
 
-import com.training.app.entrenamientos.domain.model.exception.OrdenDuplicadoException;
-import com.training.app.entrenamientos.domain.model.vo.DetalleEjercicioId;
-import com.training.app.entrenamientos.domain.model.vo.EntrenamientoDetalleId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
+import com.training.app.entrenamientos.domain.model.exception.OrdenDuplicadoException;
 
 public class Entrenamiento {
 
-    private final EntrenamientoDetalleId id;
+    private final UUID id;
     private final String nombre;
     private final int orden;
     private final String notas;
     private final List<Ejercicio> ejercicios;
 
-    private Entrenamiento(EntrenamientoDetalleId id,
+    private Entrenamiento(UUID id,
                                   String nombre,
                                   int orden,
                                   String notas,
@@ -35,7 +36,7 @@ public class Entrenamiento {
     }
 
     // Reconstruir desde bbdd — con id y ejercicios ya cargados
-    public static Entrenamiento reconstitute(EntrenamientoDetalleId id,
+    public static Entrenamiento reconstitute(UUID id,
                                                      String nombre,
                                                      int orden,
                                                      String notas,
@@ -53,6 +54,7 @@ public class Entrenamiento {
 
     // El bloque controla cómo se añaden ejercicios
     public void agregarEjercicio(Ejercicio ejercicio) {
+    	//FIXME: Este metodo para que requiere tanta fiesta? deberia agregarse sin mas
         if (ejercicios.stream().anyMatch(e -> e.getOrden() == ejercicio.getOrden())) {
             throw new OrdenDuplicadoException(
                 "Ya existe un ejercicio con orden " + ejercicio.getOrden() + " en el bloque " + nombre
@@ -61,8 +63,8 @@ public class Entrenamiento {
         ejercicios.add(ejercicio);
     }
 
-    public void eliminarEjercicio(DetalleEjercicioId ejercicioId) {
-        ejercicios.removeIf(e -> ejercicioId.equals(e.getId()));
+    public void eliminarEjercicio(UUID ejercicioId) {
+        ejercicios.removeIf(ejercicio -> ejercicioId.equals(ejercicio.getId()));
     }
 
     // Lista inmutable hacia fuera
@@ -70,8 +72,39 @@ public class Entrenamiento {
         return Collections.unmodifiableList(ejercicios);
     }
 
-    public EntrenamientoDetalleId getId() { return id; }
-    public String getNombre()             { return nombre; }
-    public int getOrden()                 { return orden; }
-    public String getNotas()             { return notas; }
+	public UUID getId() {
+		return id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public int getOrden() {
+		return orden;
+	}
+
+	public String getNotas() {
+		return notas;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(ejercicios, id, nombre, notas, orden);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Entrenamiento)) {
+			return false;
+		}
+		Entrenamiento other = (Entrenamiento) obj;
+		return Objects.equals(ejercicios, other.ejercicios) && Objects.equals(id, other.id)
+				&& Objects.equals(nombre, other.nombre) && Objects.equals(notas, other.notas) && orden == other.orden;
+	}
+
+  
 }
